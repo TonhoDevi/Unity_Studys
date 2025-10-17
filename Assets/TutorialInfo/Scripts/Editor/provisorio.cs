@@ -47,7 +47,7 @@ public class PlayerWithRunningAnimation : MonoBehaviour
         // Pulo
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
         }
     }
     
@@ -84,7 +84,7 @@ public class PlayerWithRunningAnimation : MonoBehaviour
             
             // Aplica movimento
             Vector3 targetVelocity = moveDirection * targetSpeed;
-            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+            rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
             
             // Rotaciona na direção do movimento
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -98,7 +98,7 @@ public class PlayerWithRunningAnimation : MonoBehaviour
         else
         {
             // Parado
-            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
             currentSpeed = 0f;
         }
         

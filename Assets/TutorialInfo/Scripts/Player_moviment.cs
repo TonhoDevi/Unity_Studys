@@ -46,6 +46,14 @@ public class PlayerMovementFixed : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
+            if (rb.linearVelocity.magnitude > 0.1f)
+            {
+                animator.SetTrigger("JumpMove");
+            }
+            else
+            {
+                animator.SetTrigger("JumpIdle");
+            }
         }
     }
     
@@ -70,9 +78,9 @@ public class PlayerMovementFixed : MonoBehaviour
 
 
         // Rotaciona o player na direção do movimento
-        if (moveDirection.magnitude > 0.1f)
+        if (moveDirection.magnitude > 0.5f)
         {
-            // Velocidade (shift para correr)
+            // Velocidade (shift para correr)s
             bool isRunning = Input.GetKey(KeyCode.LeftShift);
             float currentSpeed = isRunning ? runSpeed : moveSpeed;
 
@@ -108,6 +116,7 @@ public class PlayerMovementFixed : MonoBehaviour
         // Verifica se é chão pela tag OU pela normal da superfície
         if (collision.gameObject.CompareTag("Ground") || IsGroundSurface(collision))
         {
+            animator.SetBool("isGrounded", true);
             groundContactCount++;
             isGrounded = true;
         }
