@@ -46,14 +46,9 @@ public class PlayerMovementFixed : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
-            if (rb.linearVelocity.magnitude > 0.1f)
-            {
-                animator.SetTrigger("JumpMove");
-            }
-            else
-            {
-                animator.SetTrigger("JumpIdle");
-            }
+            isGrounded = false;
+            // ativa o trigger Jump
+            animator.SetTrigger("Jump");
         }
     }
     
@@ -78,9 +73,9 @@ public class PlayerMovementFixed : MonoBehaviour
 
 
         // Rotaciona o player na direção do movimento
-        if (moveDirection.magnitude > 0.5f)
+        if (moveDirection.magnitude > 0.2f)
         {
-            // Velocidade (shift para correr)s
+            // Velocidade (shift para correr)
             bool isRunning = Input.GetKey(KeyCode.LeftShift);
             float currentSpeed = isRunning ? runSpeed : moveSpeed;
 
@@ -90,8 +85,13 @@ public class PlayerMovementFixed : MonoBehaviour
             // Rotaciona na direção do movimento
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             rb.rotation = Quaternion.Slerp(rb.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
-
-            animationSpeed = isRunning ? 1.5f : 1f;
+            if(rb.linearVelocity.magnitude > 0.8f)
+            {
+                animationSpeed = isRunning ? 5f : 2f;
+            } else
+            {
+                animationSpeed = 1f;
+            }
         }
         else
         {
@@ -116,33 +116,36 @@ public class PlayerMovementFixed : MonoBehaviour
         // Verifica se é chão pela tag OU pela normal da superfície
         if (collision.gameObject.CompareTag("Ground") || IsGroundSurface(collision))
         {
-            animator.SetBool("isGrounded", true);
+
+            animator.SetTrigger("Land");
             groundContactCount++;
             isGrounded = true;
+
         }
     }
-    
+
+    void OnCollisionExit(Collision collision)
+    {
+       // if (collision.gameObject.CompareTag("Ground") || IsGroundSurface(collision))
+     //   {
+     //       groundContactCount--;
+      //      if (groundContactCount <= 0)
+        //    {
+      //          groundContactCount = 0;
+      //          isGrounded = false;
+     //       }
+       // }
+    }
+
     void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground") || IsGroundSurface(collision))
         {
+            animator.SetTrigger("Land");
             isGrounded = true;
         }
     }
-    
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground") || IsGroundSurface(collision))
-        {
-            groundContactCount--;
-            if (groundContactCount <= 0)
-            {
-                groundContactCount = 0;
-                isGrounded = false;
-            }
-        }
-    }
-    
+
     // Verifica se a superfície é "chão" baseado na inclinação
     bool IsGroundSurface(Collision collision)
     {

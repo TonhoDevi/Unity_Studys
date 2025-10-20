@@ -10,9 +10,10 @@ public class CameraTrueOrbit : MonoBehaviour
     public float distance = 8f;
     public float minDistance = 3f;
     public float maxDistance = 15f;
-    
+    public float heightOffset = 0.2f;
+
     [Header("Ângulos Iniciais")]
-    public float startAngleHorizontal = 0f; // 0 = atrás, 90 = direita, 180 = frente, 270 = esquerda
+    public float startAngleHorizontal = 180f; // 0 = atrás, 90 = direita, 180 = frente, 270 = esquerda
     public float startAngleVertical = 30f; // Inclinação (0 = nível, 90 = direto de cima)
     
     [Header("Controles")]
@@ -108,7 +109,7 @@ public class CameraTrueOrbit : MonoBehaviour
         
         Vector3 position;
         position.x = focusPoint.x + horizontalDistance * Mathf.Sin(horizontalRad);
-        position.y = focusPoint.y + currentDistance * Mathf.Sin(verticalRad);
+        position.y = focusPoint.y + currentDistance * Mathf.Sin(verticalRad) * heightOffset;
         position.z = focusPoint.z + horizontalDistance * Mathf.Cos(horizontalRad);
         
         // Aplica posição
@@ -116,43 +117,5 @@ public class CameraTrueOrbit : MonoBehaviour
         
         // Sempre olha para o ponto focal
         transform.LookAt(focusPoint);
-    }
-    
-    void OnDrawGizmos()
-    {
-        if (target == null || !Application.isPlaying) return;
-        
-        Vector3 focusPoint = target.position + targetOffset;
-        
-        // Desenha o ponto focal
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(focusPoint, 0.3f);
-        
-        // Desenha a órbita horizontal
-        Gizmos.color = Color.cyan;
-        float horizontalDist = currentDistance * Mathf.Cos(verticalAngle * Mathf.Deg2Rad);
-        DrawCircle(focusPoint, horizontalDist, 32);
-        
-        // Linha da câmera até o focal
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, focusPoint);
-    }
-    
-    void DrawCircle(Vector3 center, float radius, int segments)
-    {
-        float angleStep = 360f / segments;
-        Vector3 prevPoint = center + new Vector3(radius, 0, 0);
-        
-        for (int i = 1; i <= segments; i++)
-        {
-            float angle = i * angleStep * Mathf.Deg2Rad;
-            Vector3 newPoint = center + new Vector3(
-                Mathf.Cos(angle) * radius,
-                0,
-                Mathf.Sin(angle) * radius
-            );
-            Gizmos.DrawLine(prevPoint, newPoint);
-            prevPoint = newPoint;
-        }
     }
 }
