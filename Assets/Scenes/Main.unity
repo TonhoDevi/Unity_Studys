@@ -329,12 +329,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 678984854}
     - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
+      propertyPath: runSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
       propertyPath: jumpForce
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
       propertyPath: moveSpeed
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
+      propertyPath: walkSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
+      propertyPath: sprintSpeed
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4569029318856077266, guid: 229a3742e7ec24c48b0552c1bcb6c94b, type: 3}
       propertyPath: cameraTransform
