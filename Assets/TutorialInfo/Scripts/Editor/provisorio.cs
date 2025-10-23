@@ -106,7 +106,7 @@ public class AdvancedJumpSystem : MonoBehaviour
         yield return new WaitForSeconds(jumpDelay);
         
         // Executa o pulo
-        rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z);
         
         // Pode pular novamente após um tempo
         yield return new WaitForSeconds(0.3f);
@@ -158,7 +158,7 @@ public class AdvancedJumpSystem : MonoBehaviour
         {
             // Move com controle total
             Vector3 targetVelocity = moveDirection * targetSpeed;
-            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+            rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
             
             // Rotaciona
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -167,14 +167,14 @@ public class AdvancedJumpSystem : MonoBehaviour
         else
         {
             // Parado
-            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }
     }
     
     void HandleAirMovement()
     {
         // INÉRCIA: Mantém velocidade horizontal anterior
-        Vector3 currentHorizontalVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+        Vector3 currentHorizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         
         // CONTROLE REDUZIDO: Pode influenciar direção mas com menos força
         if (moveDirection.magnitude > 0.1f)
@@ -191,7 +191,7 @@ public class AdvancedJumpSystem : MonoBehaviour
                 airControlMultiplier * Time.fixedDeltaTime * 5f
             );
             
-            rb.velocity = new Vector3(newVelocity.x, rb.velocity.y, newVelocity.z);
+            rb.linearVelocity = new Vector3(newVelocity.x, rb.linearVelocity.y, newVelocity.z);
             
             // Rotaciona no ar (opcional - pode comentar se não quiser)
             if (moveDirection.magnitude > 0.3f)
@@ -208,7 +208,7 @@ public class AdvancedJumpSystem : MonoBehaviour
         {
             // SEM INPUT: Aplica air drag (desacelera gradualmente)
             currentHorizontalVelocity *= airDrag;
-            rb.velocity = new Vector3(currentHorizontalVelocity.x, rb.velocity.y, currentHorizontalVelocity.z);
+            rb.linearVelocity = new Vector3(currentHorizontalVelocity.x, rb.linearVelocity.y, currentHorizontalVelocity.z);
         }
     }
     
@@ -218,19 +218,19 @@ public class AdvancedJumpSystem : MonoBehaviour
         
         float gravity = Physics.gravity.y; // -9.81 padrão
         
-        if (rb.velocity.y < 0)
+        if (rb.linearVelocity.y < 0)
         {
             // CAINDO: Aplica gravidade mais forte
-            rb.velocity += Vector3.up * gravity * (fallMultiplier - 1) * Time.fixedDeltaTime;
+            rb.linearVelocity += Vector3.up * gravity * (fallMultiplier - 1) * Time.fixedDeltaTime;
         }
-        else if (rb.velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+        else if (rb.linearVelocity.y > 0 && !Input.GetKey(KeyCode.Space))
         {
             // SUBINDO mas soltou espaço: Cai mais rápido (pulo curto)
-            rb.velocity += Vector3.up * gravity * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+            rb.linearVelocity += Vector3.up * gravity * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
         
         // Aplica gravidade base
-        rb.velocity += Vector3.up * gravity * Time.fixedDeltaTime;
+        rb.linearVelocity += Vector3.up * gravity * Time.fixedDeltaTime;
     }
     
     void UpdateAnimations()
@@ -238,7 +238,7 @@ public class AdvancedJumpSystem : MonoBehaviour
         if (animator == null) return;
         
         // Velocidade horizontal para blend tree
-        float horizontalSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+        float horizontalSpeed = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude;
         float animSpeed = 0f;
         
         if (horizontalSpeed > runSpeed * 0.8f)
@@ -297,7 +297,7 @@ public class AdvancedJumpSystem : MonoBehaviour
         
         // Desenha vetor de velocidade
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(transform.position, rb.velocity);
+        Gizmos.DrawRay(transform.position, rb.linearVelocity);
         
         // Desenha controle de ar
         if (!isGrounded)

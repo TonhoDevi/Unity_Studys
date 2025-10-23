@@ -13,6 +13,9 @@ public class OutfitManager : MonoBehaviour
     
     [Header("Conjunto 3")]
     public GameObject[] outfit3;
+
+    [Header("Conjunto 4")]
+    public GameObject[] outfit4;
     
     [Header("Configuração")]
     public int activeOutfit = 1; // Qual conjunto está ativo (1, 2, 3...)
@@ -29,6 +32,7 @@ public class OutfitManager : MonoBehaviour
         SetActive(outfit1, false);
         SetActive(outfit2, false);
         SetActive(outfit3, false);
+        SetActive(outfit4, false);
         
         // Ativa apenas o conjunto escolhido
         switch(outfitNumber)
@@ -41,6 +45,9 @@ public class OutfitManager : MonoBehaviour
                 break;
             case 3:
                 SetActive(outfit3, true);
+                break;
+            case 4:
+                SetActive(outfit4, true);
                 break;
         }
         
@@ -80,6 +87,11 @@ public class OutfitManager : MonoBehaviour
         {
             SetOutfit(3);
             Debug.Log("Conjunto 3 ativado");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            SetOutfit(4);
+            Debug.Log("Conjunto 4 ativado");
         }
     }
 }
